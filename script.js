@@ -1,5 +1,7 @@
-const moves = ['r','p','s']
+const moves = ['r','p','s'];
 const lowerCaseMoves = moves.map(move => move.toLowerCase());
+let humanScore = 0;
+let computerScore = 0;
 
 function getComputerMove() {
     let randomMove = lowerCaseMoves[Math.floor(lowerCaseMoves.length * Math.random())];
