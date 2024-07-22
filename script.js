@@ -15,6 +15,7 @@ function playRound(humanChoice, computerChoice) {
 
     if (humanChoice === computerChoice) {
         console.log(`Draw. Computer chose ${computerChoice}`);
+        return result = "Draw";
     } else if (
         (humanChoice === "rock" && computerChoice === "scissors") ||
         (humanChoice === "paper" && computerChoice === "rock") ||
@@ -22,15 +23,20 @@ function playRound(humanChoice, computerChoice) {
     ) {
         console.log(`You win. Computer chose ${computerChoice}`);
         humanScore++;
+        return result = "You Win";
     } else {
         console.log(`You lose... Computer chose ${computerChoice}`);
         computerScore++;
+        return result = "You Lose";
     }
 }
 
 function updateScores() {
-    console.log(`Current Scores - Human: ${humanScore}, Computer: ${computerScore}`);
-}
+    const resultElement = document.querySelector('#result');
+    const scoreElement = document.querySelector('#scores');
+    // scoreElement.textContent = `You ${result}`;
+    resultElement.textContent = `${result}`;
+    scoreElement.textContent = `You ${humanScore} - ${computerScore} Computer`;}
 
 function playGame() {    
     let round = 1;
