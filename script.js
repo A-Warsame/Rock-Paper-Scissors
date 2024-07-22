@@ -1,6 +1,7 @@
 const moves = ['rock', 'paper', 'scissors'];
 let humanScore = 0;
 let computerScore = 0;
+let gameOver = false;
 
 function getComputerChoice() {
     let randomMove = moves[Math.floor(moves.length * Math.random())];
@@ -12,10 +13,11 @@ function getHumanChoice(selectedButton) {
 }
 
 function playRound(humanChoice, computerChoice) {
+    if (gameOver) return; // Prevent further rounds if the game is over
 
     if (humanChoice === computerChoice) {
         console.log(`Draw. Computer chose ${computerChoice}`);
-        return result = "Draw";
+        return "Draw";
     } else if (
         (humanChoice === "rock" && computerChoice === "scissors") ||
         (humanChoice === "paper" && computerChoice === "rock") ||
@@ -23,47 +25,45 @@ function playRound(humanChoice, computerChoice) {
     ) {
         console.log(`You win. Computer chose ${computerChoice}`);
         humanScore++;
-        return result = "You Win";
+        checkGameOver();
+        return "You Win";
     } else {
         console.log(`You lose... Computer chose ${computerChoice}`);
         computerScore++;
-        return result = "You Lose";
+        checkGameOver();
+        return "You Lose";
     }
 }
 
-function updateScores() {
+function checkGameOver() {
+    if (humanScore === 5 || computerScore === 5) {
+        gameOver = true;
+        displayFinalResult();
+    }
+}
+
+function updateScores(result) {
     const resultElement = document.querySelector('#result');
     const scoreElement = document.querySelector('#scores');
-    // scoreElement.textContent = `You ${result}`;
-    resultElement.textContent = `${result}`;
-    scoreElement.textContent = `You ${humanScore} - ${computerScore} Computer`;}
-
-function playGame() {    
-    let round = 1;
-
-    while (round <= 5) {
-        const humanSelection = getHumanChoice();
-        const computerSelection = getComputerChoice();
-        playRound(humanSelection, computerSelection);
-        console.log(`Round ${round} - Human ${humanScore} : ${computerScore} Computer`);
-        round++;
-    }
-
-    console.log(`Final score \nHuman ${humanScore} : ${computerScore} Computer`);
+    resultElement.textContent = result;
+    scoreElement.textContent = `You ${humanScore} - ${computerScore} Computer`;
 }
 
-// playGame();
+function displayFinalResult() {
+    const finalResultElement = document.querySelector('#finalResult');
+    if (humanScore === 5) {
+        finalResultElement.textContent = "Congratulations! You won the game!";
+    } else {
+        finalResultElement.textContent = "Sorry, you lost the game. Better luck next time!";
+    }
+}
 
 const buttons = document.querySelectorAll('button');
-let selectedButton = null;
-
 buttons.forEach(button => {
     button.addEventListener('click', function(event) {
         const humanChoice = getHumanChoice(event.target.textContent);
         const computerChoice = getComputerChoice();
-
-        playRound(humanChoice, computerChoice);
-        updateScores();
+        const result = playRound(humanChoice, computerChoice);
+        updateScores(result);
     });
 });
-
