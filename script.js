@@ -4,31 +4,23 @@ let computerScore = 0;
 let gameOver = false;
 
 function getComputerChoice() {
-    let randomMove = moves[Math.floor(moves.length * Math.random())];
-    return randomMove;
-}
-
-function getHumanChoice(selectedButton) {
-    return selectedButton.toLowerCase();
+    return moves[Math.floor(Math.random() * moves.length)];
 }
 
 function playRound(humanChoice, computerChoice) {
-    if (gameOver) return; // Prevent further rounds if the game is over
+    if (gameOver) return;
 
     if (humanChoice === computerChoice) {
-        console.log(`Draw. Computer chose ${computerChoice}`);
         return "Draw";
     } else if (
         (humanChoice === "rock" && computerChoice === "scissors") ||
         (humanChoice === "paper" && computerChoice === "rock") ||
         (humanChoice === "scissors" && computerChoice === "paper")
     ) {
-        console.log(`You win. Computer chose ${computerChoice}`);
         humanScore++;
         checkGameOver();
         return "You Win";
     } else {
-        console.log(`You lose... Computer chose ${computerChoice}`);
         computerScore++;
         checkGameOver();
         return "You Lose";
@@ -44,9 +36,12 @@ function checkGameOver() {
 
 function updateScores(result) {
     const resultElement = document.querySelector('#result');
-    const scoreElement = document.querySelector('#scores');
+    const humanScoreElement = document.querySelector('#humanScore');
+    const computerScoreElement = document.querySelector('#computerScore');
+
     resultElement.textContent = result;
-    scoreElement.textContent = `You ${humanScore} - ${computerScore} Computer`;
+    humanScoreElement.textContent = humanScore;
+    computerScoreElement.textContent = computerScore;
 }
 
 function displayFinalResult() {
@@ -58,10 +53,10 @@ function displayFinalResult() {
     }
 }
 
-const buttons = document.querySelectorAll('button');
+const buttons = document.querySelectorAll('.choice');
 buttons.forEach(button => {
     button.addEventListener('click', function(event) {
-        const humanChoice = getHumanChoice(event.target.textContent);
+        const humanChoice = this.id;
         const computerChoice = getComputerChoice();
         const result = playRound(humanChoice, computerChoice);
         updateScores(result);
